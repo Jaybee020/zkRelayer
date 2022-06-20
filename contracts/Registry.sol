@@ -11,7 +11,7 @@ contract Registry{
     event RelayerLocatorSet(address indexed _relayer);
 
     struct RelayerLocator {
-        string locator;     //  IP address
+        string locator;     //how users can communicate with broadacaster nodes(should be endpoiny)
     }
 
     struct RelayerAggFee{
