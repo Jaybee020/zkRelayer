@@ -19,5 +19,7 @@ async function deployRegistry(forwarderAddr: string) {
 (async function main() {
   const forwarder = await deployForwarder();
   const register = await deployRegistry(forwarder.address);
-  await forwarder.setReputation();
+  await forwarder.setReputation(register.address);
+  console.log("Registry address is " + register.address);
+  console.log("Forwarder address is " + forwarder.address);
 })();

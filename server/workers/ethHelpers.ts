@@ -1,7 +1,7 @@
 import { providers, Wallet, utils } from "ethers";
 import { MIN_TX_PROFIT, PRIVATE_KEY, TESTNET_RPC_URL } from "../config";
 
-interface Txn {
+export interface Txn {
   to: string;
   value: string;
   data: string;
@@ -12,8 +12,8 @@ export async function getProvider(networkUrl: string) {
 }
 
 export async function getWallet(networkUrl: string) {
-  //@ts-ignore
-  return new Wallet(PRIVATE_KEY, networkUrl);
+  const provider = await getProvider(networkUrl);
+  return new Wallet(PRIVATE_KEY, provider);
 }
 
 //gets the fee of relayer node

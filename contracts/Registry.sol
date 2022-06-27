@@ -27,7 +27,7 @@ contract Registry{
     struct Relayers {
         uint256 count;
         mapping(uint256 => address) list;
-        mapping(address => bool) set;   
+        mapping(address => bool) set;
     }
 
     Relayers public allRelayers;
