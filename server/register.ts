@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { forwardCall, setRegisteryLocator } from "./workers/relayer";
+import { setRegisteryLocator } from "./workers/relayer";
 import { ENDPOINT } from "./config";
 (async function run() {
   const registry = await setRegisteryLocator(ENDPOINT); //input a domain name where users can communicate with this server
