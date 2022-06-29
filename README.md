@@ -26,7 +26,7 @@ There are 2 main contracts that help in the relaying system. These include
 
 ### To run contracts test
 
-```http
+```
 npx hardhat tests
 ```
 
@@ -34,7 +34,7 @@ npx hardhat tests
 
 After cloning this repo and installing dependencies. `cd` into this directory
 
-```http
+```
 cd server
 ```
 
@@ -42,7 +42,7 @@ cd server
 
 Set up a local .env file that contains the following configuration variables
 
-```http
+```
     PRIVATE_KEY ="YOUR PRIVATE KEY";
     TESTNET_RPC_URL = "https://api.s0.ps.hmny.io";
     MIN_TX_PROFIT = YOUR PROFIT IN ONE;
@@ -66,9 +66,9 @@ export const PORT = parseInt(String(process.env.PORT));
 
 ### Running the Server
 
-    To run the server on your machine
+To run the server on your machine
 
-```http
+```
 npx ts-node app.ts
 ```
 
@@ -80,7 +80,7 @@ npx ts-node register.ts
 
 ## Client
 
-This is a light weight js module to help integrate your apps with the relayer system
+This is a light weight js module to help integrate your apps with the relayer system. You can copy this js/ts file to your workspace.
 
 ### Get Relayer(s) Data
 
