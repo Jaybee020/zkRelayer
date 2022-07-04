@@ -5,17 +5,17 @@ import { getProvider, getWallet } from "./ethHelpers";
 import {
   FORWARDER_CONTRACT,
   REGISTRY_CONTRACT,
-  TESTNET_RPC_URL,
+  MAINNET_RPC_URL,
 } from "../config";
 
 async function getRegistry() {
-  const wallet = await getWallet(TESTNET_RPC_URL);
+  const wallet = await getWallet(MAINNET_RPC_URL);
   const registery = await new Contract(REGISTRY_CONTRACT, Registry.abi, wallet);
   return registery;
 }
 
 async function getForwarder() {
-  const wallet = await getWallet(TESTNET_RPC_URL);
+  const wallet = await getWallet(MAINNET_RPC_URL);
   const forwarder = await new Contract(
     FORWARDER_CONTRACT,
     Forwarder.abi,
@@ -26,8 +26,8 @@ async function getForwarder() {
 
 export async function setRegisteryLocator(domain: string) {
   let registry = await getRegistry();
-  const wallet = await getWallet(TESTNET_RPC_URL);
-  await registry.setRelayerLocator(wallet.address, domain);
+  const wallet = await getWallet(MAINNET_RPC_URL);
+  await registry.setRelayerLocator(wallet.address, domain, {});
   return registry;
 }
 
@@ -37,9 +37,11 @@ export async function forwardCall(
   value: string
 ) {
   let forwarder = await getForwarder();
+  const gasPrice = await forwarder.provider.getGasPrice();
   const txReceipt = await forwarder.forwardCall(contractAddr, callData, {
     value: value,
     gasLimit: 1500000,
+    gasPrice: gasPrice.toNumber(),
   });
   return txReceipt.hash;
 }

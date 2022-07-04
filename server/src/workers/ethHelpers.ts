@@ -1,5 +1,5 @@
 import { providers, Wallet, utils } from "ethers";
-import { MIN_TX_PROFIT, PRIVATE_KEY, TESTNET_RPC_URL } from "../config";
+import { MIN_TX_PROFIT, PRIVATE_KEY, MAINNET_RPC_URL } from "../config";
 
 export interface Txn {
   to: string;
@@ -18,8 +18,8 @@ export async function getWallet(networkUrl: string) {
 
 //gets the fee of relayer node
 export async function getRelayerFee(networkUrl: string, txnData: Txn) {
-  const wallet = await getWallet(TESTNET_RPC_URL);
-  const provider = await getProvider(TESTNET_RPC_URL);
+  const wallet = await getWallet(MAINNET_RPC_URL);
+  const provider = await getProvider(MAINNET_RPC_URL);
 
   const gasPrice = await provider.getGasPrice();
   const estimateGasUsed = await provider.estimateGas({
@@ -33,19 +33,3 @@ export async function getRelayerFee(networkUrl: string, txnData: Txn) {
   const fee = gasCost.add(BigInt(MIN_TX_PROFIT));
   return fee;
 }
-
-// export async function sendTransaction(networkUrl: string, txnData: Txn) {
-//   const wallet = await getWallet(TESTNET_RPC_URL);
-//   const provider = await getProvider(TESTNET_RPC_URL);
-//   const nonce = await provider.getTransactionCount(wallet.address);
-//   const gasPrice = await provider.getGasPrice();
-//   const unsignedTXn = {
-//     ...txnData,
-//     nonce: nonce,
-//     gasPrice: gasPrice,
-//   };
-
-//   const signedTxn = await wallet.signTransaction(unsignedTXn);
-
-//   await provider.sendTransaction(signedTxn);
-// }

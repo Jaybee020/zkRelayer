@@ -8,7 +8,6 @@ import {
   MAINNET_DISALLOWED_RECIPIENTS,
   MIN_TX_PROFIT,
   PORT,
-  TESTNET_RPC_URL,
 } from "./config";
 import { forwardCall, setRegisteryLocator } from "./workers/relayer";
 import { getRelayerFee, getWallet } from "./workers/ethHelpers";
@@ -37,30 +36,44 @@ app.post("/submitTxn", async function (req, res) {
     const callData = String(req.body.data);
     const value = String(req.body.value);
     console.log(
-      `Relaying transaction request to: ${contractAddr} , value:${value} data: ${callData}`
+      `Relaying transaction request 
+      to: ${contractAddr} , 
+      value:${value}, 
+      data: ${callData}`
     );
     if (MAINNET_DISALLOWED_RECIPIENTS.includes(contractAddr)) {
       res.status(403).send({
-        msg: "Can't relay transaction to" + contractAddr,
+        msg: "Can't relay transaction to " + contractAddr,
       });
     }
 
     // TODO;simulate transaction and get profit
-    const profit = await simulateTxn({
+    const { success, profit } = await simulateTxn({
       to: contractAddr,
       value: value,
       data: callData,
     });
 
-    // console.log(profit);
+    //check if relay can be successfully completed
+    if (!success) {
+      console.log("Could not recreate transaction locally." + profit);
+      return res.status(400).send({
+        msg: "Could not recreate transaction locally." + profit,
+      });
+    }
 
     //check if profit is greater than minimum profit
-    if (parseInt(MIN_TX_PROFIT) && profit < utils.parseEther(MIN_TX_PROFIT)) {
+    if (
+      Number(MIN_TX_PROFIT) &&
+      Number(utils.formatEther(profit)) < Number(MIN_TX_PROFIT)
+    ) {
+      console.log(
+        "Refusing to relay transaction.Doesn't meet profit requirements"
+      );
       return res.status(400).send({
-        msg: `Fee too low.Please increase fee by ${utils
-          .parseEther(MIN_TX_PROFIT)
-          .sub(profit)
-          .toNumber()}`,
+        msg: `Fee too low for relayer.Please increase fee by ${
+          Number(MIN_TX_PROFIT) - Number(utils.formatEther(profit))
+        }`,
       });
     }
 
@@ -69,11 +82,11 @@ app.post("/submitTxn", async function (req, res) {
       return await forwardCall(contractAddr, callData, value);
     });
 
-    res.status(200).send({
-      receiptHash: hash,
-    });
+    console.log("Successfully relayed transaction with hash " + hash);
 
-    console.log("Successfully relayed transaction with hash" + hash);
+    return res.status(200).send({
+      msg: hash,
+    });
   } catch (error) {
     console.log(error);
     res.status(400).send({

@@ -1,12 +1,12 @@
 //simulate transaction
 import { providers, Signer, utils } from "ethers";
 import { provider } from "ganache";
-import { TESTNET_RPC_URL } from "../config";
+import { MAINNET_RPC_URL } from "../config";
 import { getWallet, Txn } from "./ethHelpers";
 
 function createForkedWeb3() {
   //@ts-ignore
-  return new providers.Web3Provider(provider({ fork: TESTNET_RPC_URL }));
+  return new providers.Web3Provider(provider({ fork: MAINNET_RPC_URL }));
 }
 
 async function signTxn(
@@ -32,14 +32,19 @@ async function buildTxn(txn: Txn, forkedWeb3: providers.Web3Provider) {
 
 export async function simulateTxn(txn: Txn) {
   const forkedWeb3 = createForkedWeb3();
-  const wallet = await getWallet(TESTNET_RPC_URL);
+  const wallet = await getWallet(MAINNET_RPC_URL);
   const tx = await buildTxn(txn, forkedWeb3);
   //@ts-ignore
   const signedTxn = await signTxn(forkedWeb3, tx, wallet);
 
   const initialBalance = await forkedWeb3.getBalance(wallet.address);
-  await forkedWeb3.sendTransaction(signedTxn);
-  const finalBalnce = await forkedWeb3.getBalance(wallet.address);
-  const profit = finalBalnce.sub(initialBalance);
-  return profit;
+  const sentTx = await forkedWeb3.sendTransaction(signedTxn);
+  try {
+    await sentTx.wait();
+    const finalBalnce = await forkedWeb3.getBalance(wallet.address);
+    const profit = finalBalnce.sub(initialBalance);
+    return { success: true, profit: profit };
+  } catch (error: any) {
+    return { success: false, profit: error.reason };
+  }
 }

@@ -1,8 +1,9 @@
 {
-  "name": "client",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "relayer-client",
+  "version": "1.0.6",
+  "description": "A lightweight javascript module that lets apps interact with the registry network ",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,5 +13,8 @@
   "dependencies": {
     "axios": "^0.27.2",
     "ethers": "^5.6.9"
+  },
+  "devDependencies": {
+    "@types/ping": "^0.4.1"
   }
 }

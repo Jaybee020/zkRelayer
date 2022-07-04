@@ -18,11 +18,12 @@ The relayer system consists of three components.
 
 ## Contracts
 
+The contracts help to provide a way for relayers to show their willingness to pay gas fees for a particular transaction for a certain reward.
 There are 2 main contracts that help in the relaying system. These include
 | component | description |
 | --------- | ---------------------------------------------------------------------------------------------- |
-| Registry | This contract helps keeps track of transaction broadcasters(along with their respective locators).It also helps users to pick a suitable transaction relayer based on total fees and no of transactions relayed |
-| Forwarder | A contract that helps call other contracts when provided with the right callData and contract Address. This contract then pays the relayer a fee |
+| Registry | This contract helps keeps track of transaction broadcasters(along with their respective locators).It also helps keeps track of all relayed transactions which helps users to pick a suitable transaction relayer based on total fees and no of transactions relayed |
+| Forwarder | A contract that helps sends broadcast requests to the target contract address when provided with the right callData. The target contract then pays the forwarder contract a fee(who sends it to the relayer) |
 
 ### To run contracts test
 
@@ -31,6 +32,8 @@ npx hardhat tests
 ```
 
 ## Server
+
+The server component is a server that when deployed online(and its domain name is registered on a contract) can help broadcast users transactions to the blockchain for a particular specified fee. Anyone can run this server and publish their endpoint to the registry
 
 After cloning this repo and installing dependencies. `cd` into this directory
 
@@ -66,13 +69,19 @@ export const PORT = parseInt(String(process.env.PORT));
 
 ### Running the Server
 
-To run the server on your machine
+To run the server on your machine, you compile the src files and run the server
 
 ```
-npx ts-node app.ts
+npm start
 ```
 
-Then proceed to register yourself on the registry contract
+It can also be started with the docker command.
+
+```
+docker compose up
+```
+
+Then proceed to register yourself on the registry contract after setting your endpoint in the config.js file
 
 ```
 npx ts-node register.ts
@@ -80,7 +89,13 @@ npx ts-node register.ts
 
 ## Client
 
-This is a light weight js module to help integrate your apps with the relayer system. You can copy this js/ts file to your workspace.
+This is a light weight js module to help integrate your apps with the relayer system. This can be downloaded via npm . It provides a way for applications to provide the users relayers data.
+
+### To install module
+
+```
+npm i relayer-client
+```
 
 ### Get Relayer(s) Data
 
