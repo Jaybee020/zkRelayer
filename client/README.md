@@ -2,6 +2,8 @@
 
 This is a light weight js module to help integrate your apps with the relayer system.
 
+NOTE:For Harmony devnet install version 1.0.6,while for Harmony Mainnet install latest verion(1.0.7)
+
 ### Get Relayer(s) Data
 
 ```js

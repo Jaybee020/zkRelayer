@@ -8,7 +8,7 @@ services:
       - ./:/home/node/src
       - /home/node/src/node_modules
     environment:
-      PRIVATE_KEY: 0xef829cba67137d0464aed01a508b088e669ed71efdcc98737af14cbe5c312f27
+      PRIVATE_KEY: YOUR_PRIVATE_KEY
       TESTNET_RPC_URL: https://api.s0.ps.hmny.io
       MIN_TX_PROFIT: 0.5
       FEE: 0.4
