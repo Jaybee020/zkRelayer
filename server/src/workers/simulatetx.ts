@@ -38,8 +38,13 @@ export async function simulateTxn(txn: Txn) {
   const signedTxn = await signTxn(forkedWeb3, tx, wallet);
 
   const initialBalance = await forkedWeb3.getBalance(wallet.address);
-  await forkedWeb3.sendTransaction(signedTxn);
-  const finalBalnce = await forkedWeb3.getBalance(wallet.address);
-  const profit = finalBalnce.sub(initialBalance);
-  return profit;
+  const sentTx = await forkedWeb3.sendTransaction(signedTxn);
+  try {
+    await sentTx.wait();
+    const finalBalnce = await forkedWeb3.getBalance(wallet.address);
+    const profit = finalBalnce.sub(initialBalance);
+    return { success: true, profit: profit };
+  } catch (error: any) {
+    return { success: false, profit: error.reason };
+  }
 }

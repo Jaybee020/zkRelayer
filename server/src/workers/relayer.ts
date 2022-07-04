@@ -1,5 +1,5 @@
-import Registry from "../Registry.json";
-import Forwarder from "../Forwarder.json";
+import Registry from "../../Registry.json";
+import Forwarder from "../../Forwarder.json";
 import { Contract, ethers } from "ethers";
 import { getProvider, getWallet } from "./ethHelpers";
 import {

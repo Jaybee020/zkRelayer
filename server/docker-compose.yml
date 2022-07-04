@@ -1,0 +1,15 @@
+version: "3"
+services:
+  relayer-server:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/home/node/src
+      - /home/node/src/node_modules
+    environment:
+      PRIVATE_KEY: 0xef829cba67137d0464aed01a508b088e669ed71efdcc98737af14cbe5c312f27
+      TESTNET_RPC_URL: https://api.s0.ps.hmny.io
+      MIN_TX_PROFIT: 0.5
+      FEE: 0.4
+      PORT: 3000

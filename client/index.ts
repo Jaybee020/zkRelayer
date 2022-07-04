@@ -4,7 +4,7 @@ import axios from "axios";
 
 const REGISTRY_CONTRACT = "0x4a0a5D875322De27e170f7c6E3678d47f711A50F"; //registry contract address
 
-interface Txn {
+export interface Txn {
   to: string;
   value: string;
   data: string;
@@ -20,7 +20,7 @@ export class RegistryClient {
   registryAddr: string;
   protocol: string;
 
-  constructor(provider: providers.JsonRpcProvider, protocol = "http") {
+  constructor(provider: providers.JsonRpcProvider, protocol = "https") {
     this.provider = provider;
     this.registryAddr = REGISTRY_CONTRACT;
     this.protocol = protocol;
